@@ -1,3 +1,6 @@
+-- Al final del codigo esta la creacion de la fk_agentes
+
+
  -- Eliminamos si existe la base de datos
 drop schema if exists inmobiliaria_model;
 
