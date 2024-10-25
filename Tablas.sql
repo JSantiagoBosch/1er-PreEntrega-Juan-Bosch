@@ -1,6 +1,3 @@
--- Al final del codigo esta la creacion de la fk_agentes
-
-
  -- Eliminamos si existe la base de datos
 drop schema if exists inmobiliaria_model;
 
@@ -54,18 +51,38 @@ CREATE TABLE if not exists agentes (
 
 
 -- Tabla: Transacciones
-CREATE TABLE if not exists trasacciones (
+CREATE TABLE if not exists transacciones (
 	id_transaccion int auto_increment primary key,
     id_propiedad int NOT NULL,
     id_cliente int NOT NULL,
-    tipo_transaccion enum('casa', 'departamento', 'terreno') NOT NULL,
+    tipo_transaccion enum('Venta', 'Alquiler') NOT NULL,
     precio decimal NOT NULL,
     fecha_transaccion DATETIME NOT NULL,
     foreign key (id_propiedad) references propiedades(id_propiedad),
     foreign key (id_cliente) references clientes(id_cliente)
 );
 
+-- Tabla para auditoría de cambios en clientes
+CREATE TABLE if not exists auditoria_clientes (
+    id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT,
+    cambio VARCHAR(255),
+    fecha DATETIME,
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+);
+
+-- Tabla para auditoría de cambios en propiedades
+CREATE TABLE if not exists auditoria_propiedades (
+    id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+    id_propiedad INT,
+    accion VARCHAR(50),
+    fecha DATETIME,
+    FOREIGN KEY (id_propiedad) REFERENCES propiedades(id_propiedad)
+);
+
+
 -- Modificación de la tabla Propiedades para relacionarla con Agentes
 ALTER TABLE propiedades
 ADD CONSTRAINT fk_agente
 FOREIGN KEY (id_agente) REFERENCES agentes(id_agente);
+
